@@ -1,4 +1,5 @@
-
+from .models import Project
+from .serializers import ProjectSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -31,39 +32,6 @@ def profile_api(request):
 
 @api_view(['GET'])
 def projects_api(request):
-    projects = [
-        {
-            "id": 1,
-            "title": "React Shopping Cart",
-            "category": "Frontend Development",
-            "description": "A responsive shopping cart with product details, quantity controls, cart management, and localStorage.",
-            "technologies": ["React", "JavaScript", "CSS", "Vite"],
-            "github_url": "https://github.com/teacher019",
-        },
-        {
-            "id": 2,
-            "title": "Live Score App",
-            "category": "Flutter App Development",
-            "description": "A mobile application project using Firebase services and Flutter.",
-            "technologies": ["Flutter", "Dart", "Firebase"],
-            "github_url": "https://github.com/teacher019/live_score_project_app",
-        },
-        {
-            "id": 3,
-            "title": "Attendance Tracker",
-            "category": "Flutter App Development",
-            "description": "A student attendance tracking project using Provider and ChangeNotifier.",
-            "technologies": ["Flutter", "Dart", "Provider"],
-            "github_url": "https://github.com/teacher019/student_record_assignment",
-        },
-        {
-            "id": 4,
-            "title": "Multi-Author Blog",
-            "category": "Backend Development",
-            "description": "A Django blog project with features including search, pagination, comments, and likes.",
-            "technologies": ["Python", "Django", "SQLite"],
-            "github_url": "https://github.com/teacher019",
-        },
-    ]
-
-    return Response(projects)
+    projects = Project.objects.all()
+    serializer = ProjectSerializer(projects, many=True)
+    return Response(serializer.data)
