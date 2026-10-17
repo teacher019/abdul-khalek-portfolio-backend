@@ -1,0 +1,32 @@
+{
+  "info": {
+    "_postman_id": "a9d77df3-807b-4376-a904-9e0babb5cf80",
+    "name": "Abdul Khalek Portfolio API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "47839154"
+  },
+  "item": [
+    {
+      "name": "Get All Projects",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://abdul-khalek-portfolio-backend.onrender.com/api/projects/",
+          "protocol": "https",
+          "host": [
+            "abdul-khalek-portfolio-backend",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "projects",
+            ""
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

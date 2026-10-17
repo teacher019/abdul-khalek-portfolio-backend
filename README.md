@@ -90,3 +90,15 @@ The backend is deployed on Render. The repository includes a `build.sh` script f
 ## Repository
 
 https://github.com/teacher019/abdul-khalek-portfolio-backend
+## Postman API Testing
+
+A Postman collection is included in the `submission/` directory for testing the Portfolio API.
+
+**Collection file:** `submission/Abdul Khalek Portfolio API.postman_collection.json`
+
+### How to test
+1. Open Postman.
+2. Click **Import**.
+3. Select the Postman collection JSON file from the `submission/` directory.
+4. Send the `GET` request to `https://abdul-khalek-portfolio-backend.onrender.com/api/projects/`.
+5. Verify that the response status is `200 OK` and the response body contains JSON project data.
