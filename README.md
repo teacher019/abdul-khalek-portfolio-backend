@@ -47,6 +47,7 @@ All API endpoints below are public and do not require API authentication in the 
 | GET | `/api/blog/<slug>/` | Retrieve one published blog post |
 | GET | `/api/blog/<slug>/comments/` | Retrieve approved comments for a published post |
 | POST | `/api/blog/<slug>/comments/` | Submit a comment for moderation |
+| POST | `/api/blog/<slug>/like/` | Toggle Like/Unlike for a published blog post and return the updated like count |
 
 ### Comment submission example
 
@@ -67,6 +68,7 @@ A valid comment returns HTTP 201 and remains pending until approved in Django Ad
 - **Project**: title, category, description, technologies (JSON), GitHub URL and creation timestamp.
 - **BlogPost**: title, unique slug, category, excerpt, content, published status, creation timestamp and update timestamp.
 - **BlogComment**: foreign key to BlogPost, visitor name, email, message, approval status and creation timestamp.
+- **BlogLike**: foreign key to BlogPost, visitor identifier and creation timestamp. A unique constraint prevents the same visitor from creating duplicate likes for the same post.
 
 Relationship: one BlogPost can have many BlogComment records. Deleting a post also deletes its related comments (`on_delete=CASCADE`).
 
