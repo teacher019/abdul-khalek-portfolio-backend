@@ -1,11 +1,15 @@
-
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
-from .models import Project, BlogPost, BlogComment, ContactMessage
+from .models import (
+    Project,
+    BlogPost,
+    BlogComment,
+    ContactMessage,
+    BlogLike,
+)
 from .serializers import (
     ProjectSerializer,
     BlogPostSerializer,
@@ -48,8 +52,9 @@ def project_detail_api(request, pk):
 
 @api_view(["GET"])
 def blog_posts_api(request):
-    posts = BlogPost.objects.filter(published=True)
-
+    posts = BlogPost.objects.filter(published=True).annotate(
+    like_count=Count("likes")
+    )
     search_query = request.query_params.get("search", "").strip()
     category = request.query_params.get("category", "").strip()
 
@@ -68,9 +73,12 @@ def blog_posts_api(request):
 
 @api_view(["GET"])
 def blog_post_detail_api(request, slug):
-    post = get_object_or_404(BlogPost, slug=slug, published=True)
+    post = get_object_or_404(
+        BlogPost.objects.annotate(like_count=Count("likes")),
+        slug=slug,
+        published=True,
+    )
     return Response(BlogPostSerializer(post).data)
-
 
 @api_view(["GET", "POST"])
 def blog_comments_api(request, slug):
@@ -111,3 +119,42 @@ def contact_message_api(request):
             status=status.HTTP_201_CREATED,
         )
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(["POST"])
+def blog_like_api(request, slug):
+    post = get_object_or_404(
+        BlogPost,
+        slug=slug,
+        published=True,
+    )
+
+    visitor_id = request.data.get("visitor_id", "")
+    visitor_id = str(visitor_id).strip()
+
+    if not visitor_id or len(visitor_id) > 64:
+        return Response(
+            {
+                "error": "A valid visitor_id is required."
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    like, created = BlogLike.objects.get_or_create(
+        post=post,
+        visitor_id=visitor_id,
+    )
+
+    if not created:
+        like.delete()
+        liked = False
+    else:
+        liked = True
+
+    like_count = BlogLike.objects.filter(post=post).count()
+
+    return Response(
+        {
+            "liked": liked,
+            "like_count": like_count,
+        },
+        status=status.HTTP_200_OK,
+    )

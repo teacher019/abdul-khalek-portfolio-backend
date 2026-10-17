@@ -1,8 +1,13 @@
 
 from rest_framework import serializers
 
-from .models import Project, BlogPost, BlogComment, ContactMessage
-
+from .models import (
+    Project,
+    BlogPost,
+    BlogComment,
+    ContactMessage,
+    BlogLike,
+)
 
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,6 +25,8 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class BlogPostSerializer(serializers.ModelSerializer):
+    like_count = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = BlogPost
         fields = [
@@ -32,14 +39,14 @@ class BlogPostSerializer(serializers.ModelSerializer):
             "published",
             "created_at",
             "updated_at",
+            "like_count",
         ]
         read_only_fields = [
             "id",
             "created_at",
             "updated_at",
+            "like_count",
         ]
-
-
 class BlogCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = BlogComment

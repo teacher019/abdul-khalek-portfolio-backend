@@ -1,7 +1,6 @@
 
 from django.contrib import admin
-from .models import Project, BlogPost, BlogComment
-
+from .models import Project, BlogPost, BlogComment, BlogLike
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
@@ -62,3 +61,10 @@ class ContactMessageAdmin(admin.ModelAdmin):
     search_fields = ("name", "email", "subject", "message")
     list_editable = ("is_read",)
     ordering = ("-created_at",)
+@admin.register(BlogLike)
+class BlogLikeAdmin(admin.ModelAdmin):
+    list_display = ("id", "post", "visitor_id", "created_at")
+    list_filter = ("created_at",)
+    search_fields = ("post__title", "visitor_id")
+    ordering = ("-created_at",)
+    readonly_fields = ("created_at",)

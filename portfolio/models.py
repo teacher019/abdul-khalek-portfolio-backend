@@ -65,3 +65,23 @@ class ContactMessage(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+class BlogLike(models.Model):
+    post = models.ForeignKey(
+        BlogPost,
+        on_delete=models.CASCADE,
+        related_name="likes",
+    )
+    visitor_id = models.CharField(max_length=64)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["post", "visitor_id"],
+                name="unique_blog_like_per_visitor",
+            )
+        ]
+
+    def __str__(self):
+        return f"Like on {self.post.title}"

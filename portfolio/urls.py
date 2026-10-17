@@ -8,8 +8,8 @@ from .views import (
     blog_post_detail_api,
     blog_comments_api,
     contact_message_api,
+    blog_like_api,
 )
-
 urlpatterns = [
     path("contact/", contact_message_api, name="contact-message-api"),
     path("profile/", profile_api, name="profile-api"),
@@ -30,4 +30,10 @@ urlpatterns = [
         blog_comments_api,
         name="blog-comments-api",
     ),
+path(
+    "blog/<slug:slug>/like/",
+    blog_like_api,
+    name="blog-like-api",
+),
+
 ]
