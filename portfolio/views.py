@@ -5,11 +5,12 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import Project, BlogPost, BlogComment
+from .models import Project, BlogPost, BlogComment, ContactMessage
 from .serializers import (
     ProjectSerializer,
     BlogPostSerializer,
     BlogCommentSerializer,
+    ContactMessageSerializer,
 )
 
 
@@ -96,4 +97,17 @@ def blog_comments_api(request, slug):
             status=status.HTTP_201_CREATED,
         )
 
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+@api_view(["POST"])
+def contact_message_api(request):
+    serializer = ContactMessageSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(
+            {"message": "Your message has been received."},
+            status=status.HTTP_201_CREATED,
+        )
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

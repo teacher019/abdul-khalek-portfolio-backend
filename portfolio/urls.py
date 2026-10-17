@@ -1,4 +1,3 @@
-
 from django.urls import path
 
 from .views import (
@@ -8,9 +7,11 @@ from .views import (
     blog_posts_api,
     blog_post_detail_api,
     blog_comments_api,
+    contact_message_api,
 )
 
 urlpatterns = [
+    path("contact/", contact_message_api, name="contact-message-api"),
     path("profile/", profile_api, name="profile-api"),
     path("projects/", projects_api, name="projects-api"),
     path(
